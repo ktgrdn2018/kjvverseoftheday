@@ -55,10 +55,10 @@
                     const lines = data.split('\n');
                     verses = [];
 
-                    // Iterate through the lines and parse the data
-                    for (const line of lines) {
+                    // Skip the header row (first line)
+                    for (let i = 1; i < lines.length; i++) {
                         // Split the line into columns
-                        const [citation, book, chapter, verse, text] = line.split(',');
+                        const [citation, book, chapter, verse, text] = lines[i].split(',');
 
                         // Create an object for each verse
                         verses.push({ citation, book, chapter, verse, text });
