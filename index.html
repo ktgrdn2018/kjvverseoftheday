@@ -58,6 +58,22 @@
             const verseTextElement = document.getElementById("verse-text");
             let verses = [];
 
+            // Function to get the URL for the full chapter based on the book and chapter
+            function getChapterURL(book, chapter) {
+                // Construct the URL in the format you mentioned
+                const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
+                return `https://www.kingjamesbibleonline.org/${formattedBook}-Chapter-${chapter}/`;
+            }
+
+            // Function to display a random verse
+            function displayRandomVerse() {
+                const randomVerseIndex = Math.floor(Math.random() * verses.length);
+                const randomVerse = verses[randomVerseIndex];
+
+                verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text;
+                dailyVerse = randomVerse; // Update the dailyVerse with the new random verse
+            }
+
             // Fetch the .csv file
             fetch(verseDataUrl)
                 .then(response => response.text())
@@ -85,39 +101,32 @@
                 .catch(error => {
                     console.error('Error fetching .csv file:', error);
                 });
+        });
 
-            // Function to display a random verse
-            function displayRandomVerse() {
-                const randomVerseIndex = Math.floor(Math.random() * verses.length);
-                const randomVerse = verses[randomVerseIndex];
+        // Function to select a daily verse based on the date
+        function getDailyVerse() {
+            // Use the day of the year to select a daily verse
+            const dailyVerseIndex = dayOfYear % verses.length;
+            const dailyVerse = verses[dailyVerseIndex];
 
-                verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text;
-                dailyVerse = randomVerse; // Update the dailyVerse with the new random verse
-            }
+            verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
+        }
 
-            // Add this code inside your "DOMContentLoaded" event listener
-            document.getElementById("read-chapter-button").addEventListener("click", function () {
-                // Get the current Verse of the Day book and chapter
-                const dailyVerse = verses[dayOfYear % verses.length];
+        // Add this code inside your "DOMContentLoaded" event listener
+        document.getElementById("show-another-verse-button").addEventListener("click", function () {
+            displayRandomVerse();
+        });
 
-                // Determine the URL for the full chapter
-                const chapterURL = getChapterURL(dailyVerse.book, dailyVerse.chapter);
+        // Add this code inside your "DOMContentLoaded" event listener
+        document.getElementById("read-chapter-button").addEventListener("click", function () {
+            // Get the current Verse of the Day book and chapter
+            const dailyVerse = verses[dayOfYear % verses.length];
 
-                // Open the chapter in a new tab or window
-                window.open(chapterURL, "_blank");
-            });
+            // Determine the URL for the full chapter
+            const chapterURL = getChapterURL(dailyVerse.book, dailyVerse.chapter);
 
-            // Inside the "DOMContentLoaded" event listener
-            document.getElementById("show-another-verse-button").addEventListener("click", function () {
-                displayRandomVerse();
-            });
-
-            // Function to get the URL for the full chapter based on the book and chapter
-            function getChapterURL(book, chapter) {
-                // Construct the URL in the format you mentioned
-                const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
-                return `https://www.kingjamesbibleonline.org/${formattedBook}-Chapter-${chapter}/`;
-            }
+            // Open the chapter in a new tab or window
+            window.open(chapterURL, "_blank");
         });
     </script>
 </body>
