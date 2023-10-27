@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KJV Verse of the Day</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+       #page-title {
+            font-size: 72px; /* Adjust the font size as needed */
+            font-family: "Arial", sans-serif;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+       .centered-content {
+           text-align: center;
+        }
+
+    #verse-text {
+        font-size: 36px;
+        font-family: "Cavolini", sans-serif;
+        margin-bottom: 36px;
+        max-width: 600px; /* Set the maximum width for the verse text */
+        margin-bottom: 20px;
+        word-wrap: break-word; /* Wrap long words */
+    }
+
+</style>
+</head>
+<body>
+    <h1 id="page-title">KJV Verse of the Day</h1>
+    <div class="centered-content">
+        <div id="verse-text">Loading...</div>
+    </div>
+    
+    <script>
+	    document.addEventListener("DOMContentLoaded", function () {
+      const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
+      const verseTextElement = document.getElementById("verse-text");
+      let verses = [];
+
+	    // Fetch the .csv file
+      fetch(verseDataUrl)
+        .then(response => response.text())
+        .then(data => {
+          // Parse the .csv data
+          verses = data.split('\n'); // Assumes each verse is in a separate line
+
+          // Display a daily verse when the page loads
+          getDailyVerse();
+        })
+        .catch(error => {
+          console.error('Error fetching .csv file:', error);
+        });
+
+      // Define a function to select a daily verse based on the date
+      function getDailyVerse() {
+        // Calculate the day of the year (1-365/366)
+        const currentDate = new Date();
+        const dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
+
+        // Use the day of the year to select a daily verse
+        const dailyVerseIndex = dayOfYear % verses.length;
+        const dailyVerse = verses[dailyVerseIndex];
+
+        verseTextElement.innerHTML = dailyVerse;
+      }
+    });
+    </script>
+</body>
+</html>
