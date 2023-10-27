@@ -101,11 +101,11 @@
         });
 
         // Function to get the URL for the full chapter based on the book and chapter
-        function getChapterURL(book, chapter) {
-            // You can use an online Bible resource or your own source to provide the full chapter URL
-            // Replace 'your_bible_resource_url' with the actual URL you want to use
-            return `https://www.kingjamesbibleonline.org/${book}/${chapter}`;
-        }
+function getChapterURL(book, chapter) {
+    // Construct the URL in the format you mentioned
+    const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
+    return `https://www.kingjamesbibleonline.org/${formattedBook}-Chapter-${chapter}/`;
+}
     </script>
 </body>
 </html>
