@@ -49,14 +49,14 @@
             <button id="show-another-verse-button">Show Another Verse</button>
         </div>
     </div>
-
+    
     <script>
         let dayOfYear; // Define dayOfYear as a global variable
         let verses = []; // Define verses as a global variable
-        const verseTextElement = document.getElementById("verse-text"); // Define verseTextElement
 
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
+            const verseTextElement = document.getElementById("verse-text");
 
             // Function to get the URL for the full chapter based on the book and chapter
             function getChapterURL(book, chapter) {
@@ -100,19 +100,32 @@
                 .catch(error => {
                     console.error('Error fetching .csv file:', error);
                 });
-        });
 
-        // Add this code inside your "DOMContentLoaded" event listener
-        document.getElementById("show-another-verse-button").addEventListener("click", function () {
-            displayRandomVerse();
-        });
+            // Function to select a daily verse based on the date
+            function getDailyVerse() {
+                // Use the day of the year to select a daily verse
+                const dailyVerseIndex = dayOfYear % verses.length;
+                const dailyVerse = verses[dailyVerseIndex];
 
-        // Add this code inside your "DOMContentLoaded" event listener
-        document.getElementById("read-chapter-button").addEventListener("click", function () {
-            // Use the dailyVerse object to get the book and chapter
-            const dailyVerse = verses[dayOfYear % verses.length];
-            const chapterURL = getChapterURL(dailyVerse.book, dailyVerse.chapter);
-            window.open(chapterURL, "_blank");
+                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text + '"';
+            }
+
+            // Add this code inside your "DOMContentLoaded" event listener
+            document.getElementById("show-another-verse-button").addEventListener("click", function () {
+                displayRandomVerse();
+            });
+
+            // Add this code inside your "DOMContentLoaded" event listener
+            document.getElementById("read-chapter-button").addEventListener("click", function () {
+                // Get the current Verse of the Day book and chapter
+                const dailyVerse = verses[dayOfYear % verses.length];
+
+                // Determine the URL for the full chapter
+                const chapterURL = getChapterURL(dailyVerse.book, dailyVerse.chapter);
+
+                // Open the chapter in a new tab or window
+                window.open(chapterURL, "_blank");
+            });
         });
     </script>
 </body>
