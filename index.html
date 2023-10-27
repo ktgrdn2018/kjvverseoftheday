@@ -51,24 +51,27 @@
         // Fetch the .csv file
         fetch(verseDataUrl)
         .then(response => response.text())
-        .then(data => {
-            // Split the CSV data into lines
-            const lines = data.split('\n');
-            verses = [];
+        // Inside the promise chain for fetching the CSV data
+.then(data => {
+    // Split the CSV data into lines
+    const lines = data.split('\n');
+    verses = [];
 
-            // Iterate through the lines and parse the data
-            for (const line of lines) {
-                // Split the line into columns
-                const [citation, book, chapter, verse, text] = line.split('\t');
+    // Iterate through the lines and parse the data
+    for (const line of lines) {
+        // Split the line into columns
+        const [citation, book, chapter, verse, text] = line.split(',');
 
+        // Remove quotation marks from the text
+        const cleanText = text.replace(/^"(.*)"$/, '$1');
 
-                // Create an object for each verse
-                verses.push({ citation, book, chapter, verse, text });
-            }
+        // Create an object for each verse
+        verses.push({ citation, book, chapter, verse, text: cleanText });
+    }
 
-            // Display a daily verse when the page loads
-            getDailyVerse();
-        })
+    // Display a daily verse when the page loads
+    getDailyVerse();
+})
         .catch(error => {
             console.error('Error fetching .csv file:', error);
         });
