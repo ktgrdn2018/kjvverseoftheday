@@ -111,21 +111,22 @@
             }
 
             // Add this code inside your "DOMContentLoaded" event listener
-            document.getElementById("show-another-verse-button").addEventListener("click", function () {
-                displayRandomVerse();
-            });
+document.getElementById("show-another-verse-button").addEventListener("click", function () {
+    displayRandomVerse();
+});
 
-            // Add this code inside your "DOMContentLoaded" event listener
-            document.getElementById("read-chapter-button").addEventListener("click", function () {
-                // Get the current Verse of the Day book and chapter
-                const dailyVerse = verses[dayOfYear % verses.length];
+// Add this code inside your "DOMContentLoaded" event listener
+document.getElementById("read-chapter-button").addEventListener("click", function () {
+    // Get the current Verse of the Day book and chapter
+    const currentVerse = verses.find(verse => verse === dailyVerse);
 
-                // Determine the URL for the full chapter
-                const chapterURL = getChapterURL(dailyVerse.book, dailyVerse.chapter);
+    // Determine the URL for the full chapter based on the current verse
+    const chapterURL = getChapterURL(currentVerse.book, currentVerse.chapter);
 
-                // Open the chapter in a new tab or window
-                window.open(chapterURL, "_blank");
-            });
+    // Open the chapter in a new tab or window
+    window.open(chapterURL, "_blank");
+});
+
         });
     </script>
 </body>
