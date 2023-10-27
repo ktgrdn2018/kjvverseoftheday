@@ -8,9 +8,9 @@
             padding: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
         }
 
         #page-title {
@@ -61,26 +61,29 @@
         let verses = []; // Define verses as a global variable
         let dailyVerseElement; // Define a global variable for the daily verse
 
+        // Function to get the URL for the full chapter based on the book and chapter
+        function getChapterURL(book, chapter) {
+            const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
+            return `https://www.kingjamesbibleonline.org/${formattedBook}/${chapter}.html`;
+        }
+
+        // Function to display a random verse
+        function displayRandomVerse() {
+            const randomVerseIndex = Math.floor(Math.random() * verses.length);
+            const randomVerse = verses[randomVerseIndex];
+            const verseTextElement = document.getElementById("verse-text");
+
+            verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text + '"';
+            dailyVerseElement = randomVerse; // Update the dailyVerse with the new random verse
+            const readChapterButton = document.getElementById("read-chapter-button");
+            readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
             const verseTextElement = document.getElementById("verse-text");
             const readChapterButton = document.getElementById("read-chapter-button");
-
-            // Function to get the URL for the full chapter based on the book and chapter
-            function getChapterURL(book, chapter) {
-                const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
-                return `https://www.kingjamesbibleonline.org/${formattedBook}/${chapter}.html`;
-            }
-
-            // Function to display a random verse
-            function displayRandomVerse() {
-                const randomVerseIndex = Math.floor(Math.random() * verses.length);
-                const randomVerse = verses[randomVerseIndex];
-
-                verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text + '"';
-                dailyVerseElement = randomVerse; // Update the dailyVerse with the new random verse
-                readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
-            }
+            const showAnotherVerseButton = document.getElementById("show-another-verse-button");
 
             // Fetch the .csv file
             fetch(verseDataUrl)
@@ -119,20 +122,20 @@
                 dailyVerseElement = dailyVerse; // Store the daily verse object
                 readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
             }
-        });
 
-        // Add this code inside your "DOMContentLoaded" event listener
-        document.getElementById("show-another-verse-button").addEventListener("click", function () {
-            displayRandomVerse();
-        });
+            // Add this code inside your "DOMContentLoaded" event listener
+            showAnotherVerseButton.addEventListener("click", function () {
+                displayRandomVerse();
+            });
 
-        // Add this code inside your "DOMContentLoaded" event listener
-        document.getElementById("read-chapter-button").addEventListener("click", function () {
-            // Check if dailyVerseElement is defined before reading the chapter
-            if (dailyVerseElement) {
-                const chapterURL = getChapterURL(dailyVerseElement.book, dailyVerseElement.chapter);
-                window.open(chapterURL, "_blank");
-            }
+            // Add this code inside your "DOMContentLoaded" event listener
+            readChapterButton.addEventListener("click", function () {
+                // Check if dailyVerseElement is defined before reading the chapter
+                if (dailyVerseElement) {
+                    const chapterURL = getChapterURL(dailyVerseElement.book, dailyVerseElement.chapter);
+                    window.open(chapterURL, "_blank");
+                }
+            });
         });
     </script>
 </body>
