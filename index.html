@@ -29,7 +29,7 @@
             font-size: 36px;
             font-family: "Cavolini", sans-serif;
             margin-bottom: 36px;
-            max-width: 600px;
+            max-width: 1000px;
             margin-bottom: 20px;
             word-wrap: break-word;
         }
@@ -121,7 +121,7 @@
                 const dailyVerseIndex = dayOfYear % verses.length;
                 const dailyVerse = verses[dailyVerseIndex];
 
-                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text + '"';
+                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
                 dailyVerseElement = dailyVerse; // Store the daily verse object
                 readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
             }
