@@ -35,15 +35,18 @@
         }
 
         .button-container {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px; /* Add margin to separate the buttons from the verse */
-        }
+        display: flex;
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 20px;
+        margin-top: 20px; /* Add margin to separate the buttons from the verse */
+        justify-content: center; /* Center buttons horizontally */
+        align-items: center; /* Center buttons vertically */
+    }
 
-        .button-container button {
-            font-size: 20px;
-            padding: 10px 20px;
-        }
+    .button-container button {
+        font-size: 20px;
+        padding: 10px 20px;
+    }
     </style>
 </head>
 <body>
