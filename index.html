@@ -55,7 +55,7 @@
     .then(data => {
       // Parse the .csv data and split it into reference and text
       verses = data.split('\n').map(line => {
-        const [reference, text] = line.split(',');
+        const [reference, text] = line.split(', ');
         return { reference, text };
       });
 
