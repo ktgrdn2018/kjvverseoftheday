@@ -33,15 +33,22 @@
             margin-bottom: 20px;
             word-wrap: break-word;
         }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+        }
     </style>
 </head>
 <body>
     <h1 id="page-title">KJV Verse of the Day</h1>
     <div class="centered-content">
         <div id="verse-text">Loading...</div>
+        <div class="button-container">
+            <button id="read-chapter-button">Read Chapter</button>
+            <button id="show-another-verse-button">Show Another Verse</button>
+        </div>
     </div>
-    <button id="read-chapter-button">Read Chapter</button>
-    <button id="show-another-verse-button">Show Another Verse</button>
 
     <script>
         let dayOfYear; // Define dayOfYear as a global variable
@@ -72,7 +79,7 @@
                     const currentDate = new Date();
                     dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
 
-                    // Display a daily verse when the page loads
+                    // Set the initial verse after data is loaded
                     getDailyVerse();
                 })
                 .catch(error => {
