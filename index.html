@@ -52,11 +52,11 @@
 
     <script>
         let dayOfYear; // Define dayOfYear as a global variable
+        let verses = []; // Define verses as a global variable
 
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
             const verseTextElement = document.getElementById("verse-text");
-            let verses = [];
 
             // Function to get the URL for the full chapter based on the book and chapter
             function getChapterURL(book, chapter) {
@@ -80,7 +80,6 @@
                 .then(data => {
                     // Split the CSV data into lines
                     const lines = data.split('\n');
-                    verses = [];
 
                     // Skip the header row (first line)
                     for (let i = 1; i < lines.length; i++) {
@@ -101,16 +100,16 @@
                 .catch(error => {
                     console.error('Error fetching .csv file:', error);
                 });
+
+            // Function to select a daily verse based on the date
+            function getDailyVerse() {
+                // Use the day of the year to select a daily verse
+                const dailyVerseIndex = dayOfYear % verses.length;
+                const dailyVerse = verses[dailyVerseIndex];
+
+                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
+            }
         });
-
-        // Function to select a daily verse based on the date
-        function getDailyVerse() {
-            // Use the day of the year to select a daily verse
-            const dailyVerseIndex = dayOfYear % verses.length;
-            const dailyVerse = verses[dailyVerseIndex];
-
-            verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
-        }
 
         // Add this code inside your "DOMContentLoaded" event listener
         document.getElementById("show-another-verse-button").addEventListener("click", function () {
