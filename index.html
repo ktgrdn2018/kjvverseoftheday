@@ -78,15 +78,15 @@
 
         // Define a function to select a daily verse based on the date
 function getDailyVerse() {
-    // Calculate the day of the year (1-365/366)
-    const currentDate = new Date();
-    const dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
+  // Calculate the day of the year (1-365/366)
+  const currentDate = new Date();
+  const dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
 
-    // Use the day of the year to select a daily verse
-    const dailyVerseIndex = dayOfYear % verses.length;
-    const dailyVerse = verses[dailyVerseIndex];
+  // Use the day of the year to select a daily verse
+  const dailyVerseIndex = dayOfYear % verses.length;
+  const dailyVerse = verses[dailyVerseIndex];
 
-    verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
+  verseTextElement.innerHTML = dailyVerse.book + ' ' + dailyVerse.chapter + ':' + dailyVerse.verse + ' "' + dailyVerse.text + '"';
 }
 
     });
