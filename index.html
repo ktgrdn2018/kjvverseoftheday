@@ -52,15 +52,24 @@
   // Fetch the .csv file
   fetch(verseDataUrl)
     .then(response => response.text())
-    .then(data => {
-      // Parse the .csv data and split it into reference and text
-      verses = data.split('\n').map(line => {
-        const [reference, text] = line.split(', ');
-        return { reference, text };
-      });
+.then(data => {
+    // Split the CSV data into lines
+    const lines = data.split('\n');
+    verses = [];
 
-      // Display a daily verse when the page loads
-      getDailyVerse();
+    // Iterate through the lines and parse the data
+    for (const line of lines) {
+        // Split the line into columns
+        const [citation, book, chapter, verse, text] = line.split('\t');
+        
+        // Create an object for each verse
+        verses.push({ citation, book, chapter, verse, text });
+    }
+
+    // Display a daily verse when the page loads
+    getDailyVerse();
+})
+
     })
     .catch(error => {
       console.error('Error fetching .csv file:', error);
