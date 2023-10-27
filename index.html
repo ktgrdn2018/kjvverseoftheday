@@ -42,51 +42,7 @@
         <div id="verse-text">Loading...</div>
     </div>
     
-    <script>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>KJV Verse of the Day</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-       #page-title {
-            font-size: 72px; /* Adjust the font size as needed */
-            font-family: "Arial", sans-serif;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-       .centered-content {
-           text-align: center;
-        }
-
-    #verse-text {
-        font-size: 36px;
-        font-family: "Cavolini", sans-serif;
-        margin-bottom: 36px;
-        max-width: 600px; /* Set the maximum width for the verse text */
-        margin-bottom: 20px;
-        word-wrap: break-word; /* Wrap long words */
-    }
-
-</style>
-</head>
-<body>
-    <h1 id="page-title">KJV Verse of the Day</h1>
-    <div class="centered-content">
-        <div id="verse-text">Loading...</div>
-    </div>
-    
+   
     <script>
 	document.addEventListener("DOMContentLoaded", function () {
   const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
@@ -97,11 +53,11 @@
   fetch(verseDataUrl)
     .then(response => response.text())
     .then(data => {
-      // Parse the .csv data
-      verses = data.split('\n'); // Assumes each verse is in a separate line
-
-      // Remove any extra quotation marks around verses
-      verses = verses.map(verse => verse.replace(/^"(.*)"$/, '$1'));
+      // Parse the .csv data and split it into reference and text
+      verses = data.split('\n').map(line => {
+        const [reference, text] = line.split(',');
+        return { reference, text };
+      });
 
       // Display a daily verse when the page loads
       getDailyVerse();
@@ -120,9 +76,10 @@
     const dailyVerseIndex = dayOfYear % verses.length;
     const dailyVerse = verses[dailyVerseIndex];
 
-    verseTextElement.innerHTML = dailyVerse;
+    verseTextElement.innerHTML = dailyVerse.reference + ' ' + dailyVerse.text;
   }
 });
+
 
     </script>
 </body>
