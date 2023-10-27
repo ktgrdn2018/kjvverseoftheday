@@ -41,6 +41,7 @@
         <div id="verse-text">Loading...</div>
     </div>
     <button id="read-chapter-button">Read Chapter</button>
+    <button id="show-another-verse-button">Show Another Verse</button>
 
     <script>
         let dayOfYear; // Define dayOfYear as a global variable
@@ -78,6 +79,15 @@
                     console.error('Error fetching .csv file:', error);
                 });
 
+            // Function to display a random verse
+            function displayRandomVerse() {
+                const randomVerseIndex = Math.floor(Math.random() * verses.length);
+                const randomVerse = verses[randomVerseIndex];
+
+                verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text;
+                dailyVerse = randomVerse; // Update the dailyVerse with the new random verse
+            }
+
             // Add this code inside your "DOMContentLoaded" event listener
             document.getElementById("read-chapter-button").addEventListener("click", function () {
                 // Get the current Verse of the Day book and chapter
@@ -90,22 +100,18 @@
                 window.open(chapterURL, "_blank");
             });
 
-            // Define a function to select a daily verse based on the date
-            function getDailyVerse() {
-                // Use the day of the year to select a daily verse
-                const dailyVerseIndex = dayOfYear % verses.length;
-                const dailyVerse = verses[dailyVerseIndex];
+            // Inside the "DOMContentLoaded" event listener
+            document.getElementById("show-another-verse-button").addEventListener("click", function () {
+                displayRandomVerse();
+            });
 
-                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text + '"';
+            // Function to get the URL for the full chapter based on the book and chapter
+            function getChapterURL(book, chapter) {
+                // Construct the URL in the format you mentioned
+                const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
+                return `https://www.kingjamesbibleonline.org/${formattedBook}-Chapter-${chapter}/`;
             }
         });
-
-        // Function to get the URL for the full chapter based on the book and chapter
-function getChapterURL(book, chapter) {
-    // Construct the URL in the format you mentioned
-    const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
-    return `https://www.kingjamesbibleonline.org/${formattedBook}-Chapter-${chapter}/`;
-}
     </script>
 </body>
 </html>
