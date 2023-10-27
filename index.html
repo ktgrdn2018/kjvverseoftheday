@@ -43,52 +43,50 @@
     </div>
     
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-  const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
-  const verseTextElement = document.getElementById("verse-text");
-  let verses = [];
+        <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
+    const verseTextElement = document.getElementById("verse-text");
+    let verses = [];
 
-  // Fetch the .csv file
-  fetch(verseDataUrl)
-    .then(response => response.text())
-    .then(data => {
-      // Split the CSV data into lines
-      const lines = data.split('\n');
-      verses = [];
+    // Fetch the .csv file
+    fetch(verseDataUrl)
+      .then(response => response.text())
+      .then(data => {
+        // Split the CSV data into lines
+        const lines = data.split('\n');
+        verses = [];
 
-      // Iterate through the lines and parse the data
-      for (const line of lines) {
-        // Split the line by tabs
-        const columns = line.split('\t');
+        // Iterate through the lines and parse the data
+        for (const line of lines) {
+          // Split the line into columns
+          const [citation, book, chapter, verse, text] = line.split(',');
 
-        // Assuming the last column contains the text
-        const text = columns[columns.length - 1];
+          // Create an object for each verse
+          verses.push({ citation, book, chapter, verse, text });
+        }
 
-        // Create an object for each verse
-        verses.push({ text });
-      }
+        // Display a daily verse when the page loads
+        getDailyVerse();
+      })
+      .catch(error => {
+        console.error('Error fetching .csv file:', error);
+      });
 
-      // Display a daily verse when the page loads
-      getDailyVerse();
-    })
-    .catch(error => {
-      console.error('Error fetching .csv file:', error);
-    });
+    // Define a function to select a daily verse based on the date
+    function getDailyVerse() {
+      // Calculate the day of the year (1-365/366)
+      const currentDate = new Date();
+      const dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
 
-  // Define a function to select a daily verse based on the date
-  function getDailyVerse() {
-    // Calculate the day of the year (1-365/366)
-    const currentDate = new Date();
-    const dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
+      // Use the day of the year to select a daily verse
+      const dailyVerseIndex = dayOfYear % verses.length;
+      const dailyVerse = verses[dailyVerseIndex];
 
-    // Use the day of the year to select a daily verse
-    const dailyVerseIndex = dayOfYear % verses.length;
-    const dailyVerse = verses[dailyVerseIndex];
+      verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
+    }
+  });
+</script>
 
-    verseTextElement.innerHTML = dailyVerse.text;
-  }
-});
-
-    </script>
 </body>
 </html>
