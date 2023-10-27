@@ -76,7 +76,7 @@
             const randomVerse = verses[randomVerseIndex];
             const verseTextElement = document.getElementById("verse-text");
 
-            verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text + '"';
+            verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text; // Remove the extra double quotation mark
             dailyVerseElement = randomVerse; // Update the dailyVerse with the new random verse
             const readChapterButton = document.getElementById("read-chapter-button");
             readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
