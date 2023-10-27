@@ -40,8 +40,11 @@
     <div class="centered-content">
         <div id="verse-text">Loading...</div>
     </div>
-    
+    <button id="read-chapter-button">Read Chapter</button>
+
     <script>
+        let dayOfYear; // Define dayOfYear as a global variable
+
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
             const verseTextElement = document.getElementById("verse-text");
@@ -64,6 +67,10 @@
                         verses.push({ citation, book, chapter, verse, text });
                     }
 
+                    // Calculate the day of the year (1-365/366)
+                    const currentDate = new Date();
+                    dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
+
                     // Display a daily verse when the page loads
                     getDailyVerse();
                 })
@@ -71,12 +78,20 @@
                     console.error('Error fetching .csv file:', error);
                 });
 
+            // Add this code inside your "DOMContentLoaded" event listener
+            document.getElementById("read-chapter-button").addEventListener("click", function () {
+                // Get the current Verse of the Day book and chapter
+                const dailyVerse = verses[dayOfYear % verses.length];
+
+                // Determine the URL for the full chapter
+                const chapterURL = getChapterURL(dailyVerse.book, dailyVerse.chapter);
+
+                // Open the chapter in a new tab or window
+                window.open(chapterURL, "_blank");
+            });
+
             // Define a function to select a daily verse based on the date
             function getDailyVerse() {
-                // Calculate the day of the year (1-365/366)
-                const currentDate = new Date();
-                const dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
-
                 // Use the day of the year to select a daily verse
                 const dailyVerseIndex = dayOfYear % verses.length;
                 const dailyVerse = verses[dailyVerseIndex];
@@ -84,6 +99,13 @@
                 verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text + '"';
             }
         });
+
+        // Function to get the URL for the full chapter based on the book and chapter
+        function getChapterURL(book, chapter) {
+            // You can use an online Bible resource or your own source to provide the full chapter URL
+            // Replace 'your_bible_resource_url' with the actual URL you want to use
+            return `https://www.kingjamesbibleonline.org/${book}/${chapter}`;
+        }
     </script>
 </body>
 </html>
