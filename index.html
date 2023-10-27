@@ -83,7 +83,7 @@ function getDailyVerse() {
     const dailyVerseIndex = dayOfYear % verses.length;
     const dailyVerse = verses[dailyVerseIndex];
 
-    verseTextElement.innerHTML = dailyVerse.book + ' ' + dailyVerse.verse + ': ' + dailyVerse.text;
+    verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
 }
 
     });
