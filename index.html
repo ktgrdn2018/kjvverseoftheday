@@ -54,6 +54,7 @@
     <script>
         let dayOfYear; // Define dayOfYear as a global variable
         let verses = []; // Define verses as a global variable
+        let verseTextElement; // Define verseTextElement as a global variable
 
         // Function to display a random verse
         function displayRandomVerse() {
@@ -72,7 +73,7 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
-            const verseTextElement = document.getElementById("verse-text");
+            verseTextElement = document.getElementById("verse-text"); // Assign the element to the global variable
 
             // Fetch the .csv file
             fetch(verseDataUrl)
@@ -107,7 +108,7 @@
                 const dailyVerseIndex = dayOfYear % verses.length;
                 const dailyVerse = verses[dailyVerseIndex];
 
-                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
+                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text + '"';
             }
         });
 
