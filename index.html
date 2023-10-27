@@ -37,7 +37,6 @@
         .button-container {
             display: flex;
             gap: 20px;
-            margin-top: 20px;
         }
     </style>
 </head>
@@ -54,26 +53,26 @@
     <script>
         let dayOfYear; // Define dayOfYear as a global variable
         let verses = []; // Define verses as a global variable
-        let verseTextElement; // Define verseTextElement as a global variable
-
-        // Function to display a random verse
-        function displayRandomVerse() {
-            const randomVerseIndex = Math.floor(Math.random() * verses.length);
-            const randomVerse = verses[randomVerseIndex];
-
-            verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text;
-        }
-
-        // Function to get the URL for the full chapter based on the book and chapter
-        function getChapterURL(book, chapter) {
-            // Construct the URL in the format you mentioned
-            const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
-            return `https://www.kingjamesbibleonline.org/${formattedBook}-Chapter-${chapter}/`;
-        }
+        const verseTextElement = document.getElementById("verse-text"); // Define verseTextElement
 
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
-            verseTextElement = document.getElementById("verse-text"); // Assign the element to the global variable
+
+            // Function to get the URL for the full chapter based on the book and chapter
+            function getChapterURL(book, chapter) {
+                // Construct the URL in the format you mentioned
+                const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
+                return `https://www.kingjamesbibleonline.org/${formattedBook}-Chapter-${chapter}/`;
+            }
+
+            // Function to display a random verse
+            function displayRandomVerse() {
+                const randomVerseIndex = Math.floor(Math.random() * verses.length);
+                const randomVerse = verses[randomVerseIndex];
+
+                verseTextElement.innerHTML = randomVerse.citation + ' "' + randomVerse.text + '"';
+                dailyVerse = randomVerse; // Update the dailyVerse with the new random verse
+            }
 
             // Fetch the .csv file
             fetch(verseDataUrl)
@@ -108,7 +107,7 @@
                 const dailyVerseIndex = dayOfYear % verses.length;
                 const dailyVerse = verses[dailyVerseIndex];
 
-                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text + '"';
+                verseTextElement.innerHTML = dailyVerse.citation + ' "' + dailyVerse.text + '"';
             }
         });
 
@@ -119,13 +118,9 @@
 
         // Add this code inside your "DOMContentLoaded" event listener
         document.getElementById("read-chapter-button").addEventListener("click", function () {
-            // Get the current Verse of the Day book and chapter
+            // Use the dailyVerse object to get the book and chapter
             const dailyVerse = verses[dayOfYear % verses.length];
-
-            // Determine the URL for the full chapter
             const chapterURL = getChapterURL(dailyVerse.book, dailyVerse.chapter);
-
-            // Open the chapter in a new tab or window
             window.open(chapterURL, "_blank");
         });
     </script>
