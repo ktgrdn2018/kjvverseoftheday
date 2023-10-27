@@ -63,7 +63,7 @@
         const [citation, book, chapter, verse, text] = line.split('\t');
 
         // Remove quotation marks from the text
-        const cleanText = text.replace(/^"(.*)"$/, '$1');
+        const cleanText = text.replace(/^"([^"]*)"$/, '$1');
 
         // Create an object for each verse
         verses.push({ citation, book, chapter, verse, text: cleanText });
