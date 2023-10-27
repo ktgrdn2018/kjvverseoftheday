@@ -70,7 +70,7 @@
                 const randomVerseIndex = Math.floor(Math.random() * verses.length);
                 const randomVerse = verses[randomVerseIndex];
 
-                verseTextElement.innerHTML = randomVerse.citation + ' "' + randomVerse.text + '"';
+                verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text + '"';
                 dailyVerse = randomVerse; // Update the dailyVerse with the new random verse
             }
 
@@ -100,15 +100,6 @@
                 .catch(error => {
                     console.error('Error fetching .csv file:', error);
                 });
-
-            // Function to select a daily verse based on the date
-            function getDailyVerse() {
-                // Use the day of the year to select a daily verse
-                const dailyVerseIndex = dayOfYear % verses.length;
-                const dailyVerse = verses[dailyVerseIndex];
-
-                verseTextElement.innerHTML = dailyVerse.citation + ' "' + dailyVerse.text + '"';
-            }
         });
 
         // Add this code inside your "DOMContentLoaded" event listener
