@@ -14,7 +14,7 @@
         }
 
         #page-title {
-            font-size: 72px; /* Adjust the font size as needed */
+            font-size: 72px;
             font-family: "Arial", sans-serif;
             font-weight: bold;
             text-align: center;
@@ -29,9 +29,9 @@
             font-size: 36px;
             font-family: "Cavolini", sans-serif;
             margin-bottom: 36px;
-            max-width: 600px; /* Set the maximum width for the verse text */
+            max-width: 600px;
             margin-bottom: 20px;
-            word-wrap: break-word; /* Wrap long words */
+            word-wrap: break-word;
         }
     </style>
 </head>
@@ -49,30 +49,27 @@
 
             // Fetch the .csv file
             fetch(verseDataUrl)
-            .then(response => response.text())
-            .then(data => {
-                // Split the CSV data into lines
-                const lines = data.split('\n');
-                verses = [];
+                .then(response => response.text())
+                .then(data => {
+                    // Split the CSV data into lines
+                    const lines = data.split('\n');
+                    verses = [];
 
-                // Iterate through the lines and parse the data
-                for (const line of lines) {
-                    // Split the line into columns
-                    const [citation, book, chapter, verse, text] = line.split(',');
+                    // Iterate through the lines and parse the data
+                    for (const line of lines) {
+                        // Split the line into columns
+                        const [citation, book, chapter, verse, text] = line.split(',');
 
-                    // Remove quotation marks from the text
-                    const cleanText = text.replace(/^"(.*)"$/, '$1');
+                        // Create an object for each verse
+                        verses.push({ citation, book, chapter, verse, text });
+                    }
 
-                    // Create an object for each verse
-                    verses.push({ citation, book, chapter, verse, text: cleanText });
-                }
-
-                // Display a daily verse when the page loads
-                getDailyVerse();
-            })
-            .catch(error => {
-                console.error('Error fetching .csv file:', error);
-            });
+                    // Display a daily verse when the page loads
+                    getDailyVerse();
+                })
+                .catch(error => {
+                    console.error('Error fetching .csv file:', error);
+                });
 
             // Define a function to select a daily verse based on the date
             function getDailyVerse() {
@@ -84,7 +81,7 @@
                 const dailyVerseIndex = dayOfYear % verses.length;
                 const dailyVerse = verses[dailyVerseIndex];
 
-                verseTextElement.innerHTML = dailyVerse.book + ' ' + dailyVerse.chapter + ':' + dailyVerse.verse + ' "' + dailyVerse.text + '"';
+                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
             }
         });
     </script>
