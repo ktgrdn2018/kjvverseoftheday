@@ -8,9 +8,9 @@
             padding: 0;
             height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
         }
 
         #page-title {
@@ -37,6 +37,7 @@
         .button-container {
             display: flex;
             gap: 20px;
+            margin-top: 20px; /* Add margin to separate the buttons from the verse */
         }
 
         .button-container button {
@@ -74,7 +75,7 @@
                 const randomVerseIndex = Math.floor(Math.random() * verses.length);
                 const randomVerse = verses[randomVerseIndex];
 
-                verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text + '"';
+                verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text;
                 dailyVerse = randomVerse; // Update the dailyVerse with the new random verse
             }
 
@@ -99,7 +100,7 @@
             function getDailyVerse() {
                 const dailyVerseIndex = dayOfYear % verses.length;
                 const dailyVerse = verses[dailyVerseIndex];
-                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text + '"';
+                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
             }
 
             document.getElementById("show-another-verse-button").addEventListener("click", function () {
