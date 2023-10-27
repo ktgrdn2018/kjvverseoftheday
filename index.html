@@ -13,7 +13,7 @@
             flex-direction: column;
         }
 
-       #page-title {
+        #page-title {
             font-size: 72px; /* Adjust the font size as needed */
             font-family: "Arial", sans-serif;
             font-weight: bold;
@@ -21,20 +21,19 @@
             margin-bottom: 20px;
         }
 
-       .centered-content {
-           text-align: center;
+        .centered-content {
+            text-align: center;
         }
 
-    #verse-text {
-        font-size: 36px;
-        font-family: "Cavolini", sans-serif;
-        margin-bottom: 36px;
-        max-width: 600px; /* Set the maximum width for the verse text */
-        margin-bottom: 20px;
-        word-wrap: break-word; /* Wrap long words */
-    }
-
-</style>
+        #verse-text {
+            font-size: 36px;
+            font-family: "Cavolini", sans-serif;
+            margin-bottom: 36px;
+            max-width: 600px; /* Set the maximum width for the verse text */
+            margin-bottom: 20px;
+            word-wrap: break-word; /* Wrap long words */
+        }
+    </style>
 </head>
 <body>
     <h1 id="page-title">KJV Verse of the Day</h1>
@@ -43,53 +42,51 @@
     </div>
     
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const verseDataUrl = 'https://ktgrdn2018.github.io/kjvverseoftheday/bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
-        const verseTextElement = document.getElementById("verse-text");
-        let verses = [];
+        document.addEventListener("DOMContentLoaded", function () {
+            const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
+            const verseTextElement = document.getElementById("verse-text");
+            let verses = [];
 
-        // Fetch the .csv file
-        fetch(verseDataUrl)
-        .then(response => response.text())
-        // Inside the promise chain for fetching the CSV data
-.then(data => {
-    // Split the CSV data into lines
-    const lines = data.split('\n');
-    verses = [];
+            // Fetch the .csv file
+            fetch(verseDataUrl)
+            .then(response => response.text())
+            .then(data => {
+                // Split the CSV data into lines
+                const lines = data.split('\n');
+                verses = [];
 
-    // Iterate through the lines and parse the data
-    for (const line of lines) {
-        // Split the line into columns
-        const [citation, book, chapter, verse, text] = line.split('\t');
+                // Iterate through the lines and parse the data
+                for (const line of lines) {
+                    // Split the line into columns
+                    const [citation, book, chapter, verse, text] = line.split(',');
 
-        // Remove quotation marks from the text
-        const cleanText = text.replace(/^"([^"]*)"$/, '$1');
+                    // Remove quotation marks from the text
+                    const cleanText = text.replace(/^"(.*)"$/, '$1');
 
-        // Create an object for each verse
-        verses.push({ citation, book, chapter, verse, text: cleanText });
-    }
+                    // Create an object for each verse
+                    verses.push({ citation, book, chapter, verse, text: cleanText });
+                }
 
-    // Display a daily verse when the page loads
-    getDailyVerse();
-})
-        .catch(error => {
-            console.error('Error fetching .csv file:', error);
+                // Display a daily verse when the page loads
+                getDailyVerse();
+            })
+            .catch(error => {
+                console.error('Error fetching .csv file:', error);
+            });
+
+            // Define a function to select a daily verse based on the date
+            function getDailyVerse() {
+                // Calculate the day of the year (1-365/366)
+                const currentDate = new Date();
+                const dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
+
+                // Use the day of the year to select a daily verse
+                const dailyVerseIndex = dayOfYear % verses.length;
+                const dailyVerse = verses[dailyVerseIndex];
+
+                verseTextElement.innerHTML = dailyVerse.book + ' ' + dailyVerse.chapter + ':' + dailyVerse.verse + ' "' + dailyVerse.text + '"';
+            }
         });
-
-        // Define a function to select a daily verse based on the date
-function getDailyVerse() {
-  // Calculate the day of the year (1-365/366)
-  const currentDate = new Date();
-  const dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
-
-  // Use the day of the year to select a daily verse
-  const dailyVerseIndex = dayOfYear % verses.length;
-  const dailyVerse = verses[dailyVerseIndex];
-
-  verseTextElement.innerHTML = dailyVerse.book + ' ' + dailyVerse.chapter + ':' + dailyVerse.verse + ' "' + dailyVerse.text + '"';
-}
-
-    });
     </script>
 </body>
 </html>
