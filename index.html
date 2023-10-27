@@ -37,12 +37,6 @@
         .button-container {
             display: flex;
             gap: 20px;
-            justify-content: center; /* Center the buttons horizontally */
-        }
-
-        .button-container button {
-            font-size: 24px; /* Increase the font size of the buttons */
-            padding: 10px 20px; /* Adjust the padding to make the buttons bigger */
         }
     </style>
 </head>
@@ -59,7 +53,6 @@
     <script>
         let dayOfYear; // Define dayOfYear as a global variable
         let verses = []; // Define verses as a global variable
-        let dailyVerse; // Define dailyVerse as a global variable
 
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
@@ -112,26 +105,27 @@
             function getDailyVerse() {
                 // Use the day of the year to select a daily verse
                 const dailyVerseIndex = dayOfYear % verses.length;
-                dailyVerse = verses[dailyVerseIndex];
+                const dailyVerse = verses[dailyVerseIndex];
 
-                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
+                verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text + '"';
             }
-        });
 
-        // Add this code inside your "DOMContentLoaded" event listener
-        document.getElementById("show-another-verse-button").addEventListener("click", function () {
-            displayRandomVerse();
-        });
+            // Add this code inside your "DOMContentLoaded" event listener
+            document.getElementById("show-another-verse-button").addEventListener("click", function () {
+                displayRandomVerse();
+            });
 
-        // Add this code inside your "DOMContentLoaded" event listener
-        document.getElementById("read-chapter-button").addEventListener("click", function () {
-            if (dailyVerse) {
+            // Add this code inside your "DOMContentLoaded" event listener
+            document.getElementById("read-chapter-button").addEventListener("click", function () {
                 // Get the current Verse of the Day book and chapter
+                const dailyVerse = verses[dayOfYear % verses.length];
+
+                // Determine the URL for the full chapter
                 const chapterURL = getChapterURL(dailyVerse.book, dailyVerse.chapter);
 
                 // Open the chapter in a new tab or window
                 window.open(chapterURL, "_blank");
-            }
+            });
         });
     </script>
 </body>
