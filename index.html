@@ -51,7 +51,7 @@
     <div class="centered-content">
         <div id="verse-text">Loading...</div>
         <div class="button-container">
-            <button id="read-chapter-button">Read Chapter</button>
+            <button id="read-chapter-button" disabled>Read Chapter</button>
             <button id="show-another-verse-button">Show Another Verse</button>
         </div>
     </div>
@@ -63,6 +63,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_data_set.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
             const verseTextElement = document.getElementById("verse-text");
+            const readChapterButton = document.getElementById("read-chapter-button");
 
             // Function to get the URL for the full chapter based on the book and chapter
             function getChapterURL(book, chapter) {
@@ -77,41 +78,60 @@
 
                 verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text;
                 dailyVerse = randomVerse; // Update the dailyVerse with the new random verse
+                readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
             }
 
             // Fetch the .csv file
             fetch(verseDataUrl)
                 .then(response => response.text())
                 .then(data => {
+                    // Split the CSV data into lines
                     const lines = data.split('\n');
+
+                    // Skip the header row (first line)
                     for (let i = 1; i < lines.length; i++) {
+                        // Split the line into columns
                         const [citation, book, chapter, verse, text] = lines[i].split(',');
+
+                        // Create an object for each verse
                         verses.push({ citation, book, chapter, verse, text });
                     }
 
+                    // Calculate the day of the year (1-365/366)
                     const currentDate = new Date();
                     dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
+
+                    // Set the initial verse after data is loaded
                     getDailyVerse();
                 })
                 .catch(error => {
                     console.error('Error fetching .csv file:', error);
                 });
 
+            // Function to select a daily verse based on the date
             function getDailyVerse() {
+                // Use the day of the year to select a daily verse
                 const dailyVerseIndex = dayOfYear % verses.length;
                 const dailyVerse = verses[dailyVerseIndex];
+
                 verseTextElement.innerHTML = dailyVerse.citation + ' ' + dailyVerse.text;
+                dailyVerseElement = dailyVerse; // Store the daily verse object
+                readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
             }
+        });
 
-            document.getElementById("show-another-verse-button").addEventListener("click", function () {
-                displayRandomVerse();
-            });
+        // Add this code inside your "DOMContentLoaded" event listener
+        document.getElementById("show-another-verse-button").addEventListener("click", function () {
+            displayRandomVerse();
+        });
 
-            document.getElementById("read-chapter-button").addEventListener("click", function () {
-                const currentVerse = verses.find(v => v.citation === verseTextElement.textContent.split(' ')[0]);
-                const chapterURL = getChapterURL(currentVerse.book, currentVerse.chapter);
+        // Add this code inside your "DOMContentLoaded" event listener
+        document.getElementById("read-chapter-button").addEventListener("click", function () {
+            // Check if dailyVerseElement is defined before reading the chapter
+            if (dailyVerseElement) {
+                const chapterURL = getChapterURL(dailyVerseElement.book, dailyVerseElement.chapter);
                 window.open(chapterURL, "_blank");
-            });
+            }
         });
     </script>
 </body>
