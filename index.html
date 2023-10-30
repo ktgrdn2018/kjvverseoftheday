@@ -78,17 +78,17 @@
 
         // Function to display a random verse
         function displayRandomVerse() {
-            const randomVerseIndex = Math.floor(Math.random() * verses.length);
-            const randomVerse = verses[randomVerseIndex];
-            const verseTextElement = document.getElementById("verse-text");
-            const citationElement = document.getElementById("citation"); // Get the citation element
+           const randomVerseIndex = Math.floor(Math.random() * verses.length);
+           const randomVerse = verses[randomVerseIndex];
+           const verseTextElement = document.getElementById("verse-text");
+           const citationElement = document.getElementById("citation"); // Add this line to get the citation element
 
-            verseTextElement.innerHTML = randomVerse.text;
-            citationElement.innerHTML = randomVerse.citation; // Set the citation text
-            dailyVerseElement = randomVerse; // Update the dailyVerse with the new random verse
-            const readChapterButton = document.getElementById("read-chapter-button");
-            readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
-        }
+           verseTextElement.innerHTML = randomVerse.text;
+           citationElement.innerHTML = randomVerse.citation; // Set the citation text
+           dailyVerseElement = randomVerse;
+           const readChapterButton = document.getElementById("read-chapter-button");
+           readChapterButton.removeAttribute("disabled");
+       }
 
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_verses.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
@@ -125,15 +125,13 @@
 
             // Function to select a daily verse based on the date
             function getDailyVerse() {
-                // Use the day of the year to select a daily verse
-                const dailyVerseIndex = dayOfYear % verses.length;
-                const dailyVerse = verses[dailyVerseIndex];
-
-                verseTextElement.innerHTML = dailyVerse.text;
-                citationElement.innerHTML = dailyVerse.citation; // Set the citation text
-                dailyVerseElement = dailyVerse; // Store the daily verse object
-                readChapterButton.removeAttribute("disabled"); // Enable the "Read Chapter" button
-            }
+               const dailyVerseIndex = dayOfYear % verses.length;
+               const dailyVerse = verses[dailyVerseIndex];
+               verseTextElement.innerHTML = dailyVerse.text;
+               citationElement.innerHTML = dailyVerse.citation; // Set the citation text
+               dailyVerseElement = dailyVerse;
+               readChapterButton.removeAttribute("disabled");
+           }
 
             // Add this code inside your "DOMContentLoaded" event listener
             showAnotherVerseButton.addEventListener("click", function () {
