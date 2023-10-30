@@ -28,15 +28,15 @@
         #verse-text {
             font-size: 36px;
             font-family: "Cavolini", sans-serif;
-            margin-bottom: 20px;
+            margin-bottom: 36px;
             max-width: 1000px;
+            margin-bottom: 20px;
             word-wrap: break-word;
         }
 
         #citation {
-            font-size: 24px; /* Adjust the font size as needed */
-            font-family: "Arial", sans-serif; /* You can change the font */
-            margin-top: 10px; /* Add some space between the verse and citation */
+            font-size: 24px; /* You can adjust the font size for the citation */
+            font-family: "Arial", sans-serif; /* You can use a different font for the citation */
         }
 
         .button-container {
@@ -58,7 +58,7 @@
     <h1 id="page-title">KJV Verse of the Day</h1>
     <div class="centered-content">
         <div id="verse-text">Loading...</div>
-        <div id="citation"></div> <!-- Add a new div for citation -->
+        <div id="citation"></div> <!-- Add a div for the citation -->
         <div class="button-container">
             <button id="read-chapter-button" disabled>Read Chapter</button>
             <button id="show-another-verse-button">Show Another Verse</button>
@@ -66,81 +66,70 @@
     </div>
 
     <script>
-        let dayOfYear; // Define dayOfYear as a global variable
-        let verses = []; // Define verses as a global variable
-        let dailyVerseElement; // Define a global variable for the daily verse
+        let dayOfYear;
+        let verses = [];
+        let dailyVerseElement;
 
-        // Function to get the URL for the full chapter based on the book and chapter
         function getChapterURL(book, chapter) {
-            const formattedBook = book.replace(/ /g, '-'); // Replace spaces with dashes
+            const formattedBook = book.replace(/ /g, '-');
             return `https://www.kingjamesbibleonline.org/${formattedBook}-Chapter-${chapter}/`;
         }
 
-        // Function to display a random verse
         function displayRandomVerse() {
-           const randomVerseIndex = Math.floor(Math.random() * verses.length);
-           const randomVerse = verses[randomVerseIndex];
-           const verseTextElement = document.getElementById("verse-text");
-           const citationElement = document.getElementById("citation"); // Add this line to get the citation element
+            const randomVerseIndex = Math.floor(Math.random() * verses.length);
+            const randomVerse = verses[randomVerseIndex];
+            const verseTextElement = document.getElementById("verse-text");
+            const citationElement = document.getElementById("citation");
 
-           verseTextElement.innerHTML = randomVerse.text;
-           citationElement.innerHTML = randomVerse.citation; // Set the citation text
-           dailyVerseElement = randomVerse;
-           const readChapterButton = document.getElementById("read-chapter-button");
-           readChapterButton.removeAttribute("disabled");
-       }
+            verseTextElement.innerHTML = randomVerse.text;
+            citationElement.innerHTML = randomVerse.citation;
+
+            dailyVerseElement = randomVerse;
+            const readChapterButton = document.getElementById("read-chapter-button");
+            readChapterButton.removeAttribute("disabled");
+        }
 
         document.addEventListener("DOMContentLoaded", function () {
-            const verseDataUrl = 'bible_verses.csv'; // Use a relative path if the .csv file is in the same directory as your HTML file
+            const verseDataUrl = 'bible_verses.csv';
             const verseTextElement = document.getElementById("verse-text");
+            const citationElement = document.getElementById("citation");
             const readChapterButton = document.getElementById("read-chapter-button");
             const showAnotherVerseButton = document.getElementById("show-another-verse-button");
 
-            // Fetch the .csv file
             fetch(verseDataUrl)
                 .then(response => response.text())
                 .then(data => {
-                    // Split the CSV data into lines
                     const lines = data.split('\n');
 
-                    // Skip the header row (first line)
                     for (let i = 1; i < lines.length; i++) {
-                        // Split the line into columns
                         const [citation, book, chapter, verse, text] = lines[i].split('|');
-
-                        // Create an object for each verse
                         verses.push({ citation, book, chapter, verse, text });
                     }
 
-                    // Calculate the day of the year (1-365/366)
                     const currentDate = new Date();
                     dayOfYear = Math.floor((currentDate - new Date(currentDate.getFullYear(), 0, 0)) / 86400000);
 
-                    // Set the initial verse after data is loaded
                     getDailyVerse();
                 })
                 .catch(error => {
                     console.error('Error fetching .csv file:', error);
                 });
 
-            // Function to select a daily verse based on the date
             function getDailyVerse() {
-               const dailyVerseIndex = dayOfYear % verses.length;
-               const dailyVerse = verses[dailyVerseIndex];
-               verseTextElement.innerHTML = dailyVerse.text;
-               citationElement.innerHTML = dailyVerse.citation; // Set the citation text
-               dailyVerseElement = dailyVerse;
-               readChapterButton.removeAttribute("disabled");
-           }
+                const dailyVerseIndex = dayOfYear % verses.length;
+                const dailyVerse = verses[dailyVerseIndex];
 
-            // Add this code inside your "DOMContentLoaded" event listener
+                verseTextElement.innerHTML = dailyVerse.text;
+                citationElement.innerHTML = dailyVerse.citation;
+                dailyVerseElement = dailyVerse;
+                readChapterButton.removeAttribute("disabled");
+            }
+
             showAnotherVerseButton.addEventListener("click", function () {
                 displayRandomVerse();
             });
 
-            // Add this code inside your "DOMContentLoaded" event listener
             readChapterButton.addEventListener("click", function () {
-                // Check if dailyVerseElement is defined before reading the chapter
                 if (dailyVerseElement) {
                     const chapterURL = getChapterURL(dailyVerseElement.book, dailyVerseElement.chapter);
                     window.open(chapterURL, "_blank");
