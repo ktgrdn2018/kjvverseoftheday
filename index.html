@@ -69,6 +69,7 @@
         let dayOfYear;
         let verses = [];
         let dailyVerseElement;
+        let usedVerses = [];
 
         function getChapterURL(book, chapter) {
             const formattedBook = book.replace(/ /g, '-');
@@ -76,18 +77,30 @@
         }
 
         function displayRandomVerse() {
-            const randomVerseIndex = Math.floor(Math.random() * verses.length);
-            const randomVerse = verses[randomVerseIndex];
-            const verseTextElement = document.getElementById("verse-text");
-            const citationElement = document.getElementById("citation");
+    // Get a random verse that hasn't been used
+    let randomVerse;
+    do {
+        randomVerse = verses[Math.floor(Math.random() * verses.length)];
+    } while (usedVerses.includes(randomVerse));
 
-            verseTextElement.innerHTML = randomVerse.text;
-            citationElement.innerHTML = randomVerse.citation;
+    // Add the verse to the usedVerses array
+    usedVerses.push(randomVerse);
 
-            dailyVerseElement = randomVerse;
-            const readChapterButton = document.getElementById("read-chapter-button");
-            readChapterButton.removeAttribute("disabled");
-        }
+    // Display the selected verse
+    const verseTextElement = document.getElementById("verse-text");
+    verseTextElement.innerHTML = randomVerse.citation + ' ' + randomVerse.text;
+    dailyVerseElement = randomVerse;
+
+    // If all verses have been used, reset the usedVerses array
+    if (usedVerses.length === verses.length) {
+        usedVerses = [];
+    }
+
+    // Enable the "Read Chapter" button
+    const readChapterButton = document.getElementById("read-chapter-button");
+    readChapterButton.removeAttribute("disabled");
+}
+
 
         document.addEventListener("DOMContentLoaded", function () {
             const verseDataUrl = 'bible_verses.csv';
