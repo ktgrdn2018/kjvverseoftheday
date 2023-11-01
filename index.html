@@ -91,9 +91,13 @@
             const verseTextElement = document.getElementById("verse-text");
             const citationElement = document.getElementById("citation");
 
+            if (randomVerse) {
             citationElement.innerHTML = randomVerse.citation; // Update the citation
             verseTextElement.innerHTML = randomVerse.text; // Only the text of the verse
             dailyVerseElement = randomVerse;
+            } else {
+                console.log("Undefined verse found!");
+            }
 
             // If all verses have been used, reset the usedVerses array
             if (usedVerses.length === verses.length) {
@@ -138,6 +142,14 @@
                     console.error('Error fetching .csv file:', error);
                 });
 
+// ...
+if (dailyVerseElement) {
+    const chapterURL = getChapterURL(dailyVerseElement.book, dailyVerseElement.chapter);
+    window.open(chapterURL, "_blank");
+} else {
+    console.error("Daily verse element is undefined:", dailyVerseElement);
+}
+            
             // Function to select a daily verse based on the date
             function getDailyVerse() {
                 // Use the day of the year to select a daily verse
