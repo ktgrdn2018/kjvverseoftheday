@@ -84,26 +84,34 @@
                 randomVerse = verses[Math.floor(Math.random() * verses.length)];
             } while (usedVerses.includes(randomVerse));
 
-            // Add the verse to the usedVerses array
-            usedVerses.push(randomVerse);
-
-            // Display the selected verse and citation
-            const verseTextElement = document.getElementById("verse-text");
-            const citationElement = document.getElementById("citation");
-
+            // Check is randomVerse is defined
             if (randomVerse) {
-            citationElement.innerHTML = randomVerse.citation; // Update the citation
-            verseTextElement.innerHTML = randomVerse.text; // Only the text of the verse
-            dailyVerseElement = randomVerse;
+                // Add the verse to the usedVerses array
+                usedVerses.push(randomVerse);
+
+                // Display the selected verse and citation
+                const verseTextElement = document.getElementById("verse-text");
+                const citationElement = document.getElementById("citation");
+                
+                citationElement.innerHTML = randomVerse.citation; // Update the citation
+                verseTextElement.innerHTML = randomVerse.text; // Only the text of the verse
+                dailyVerseElement = randomVerse;
+            
+                // If all verses have been used, reset the usedVerses array
+                if (usedVerses.length === verses.length) {
+                    usedVerses = [];
+                }
+
+                // Log the selected verse for debugging
+                console.log("Random Verse (displayRandomVerse):", randomVerse);
             } else {
+                // Log that an undefined verse was found
                 console.log("Undefined verse found!");
-            }
 
-            // If all verses have been used, reset the usedVerses array
-            if (usedVerses.length === verses.length) {
-                usedVerses = [];
+                //Further log the usedVerses array for debugging
+                console.log("Used Verses (displayRandomVerse):", usedVerses);
             }
-
+        
             // Enable the "Read Chapter" button
             const readChapterButton = document.getElementById("read-chapter-button");
             readChapterButton.removeAttribute("disabled");
@@ -155,6 +163,10 @@ if (dailyVerseElement) {
                 // Use the day of the year to select a daily verse
                 const dailyVerseIndex = dayOfYear % verses.length;
                 const dailyVerse = verses[dailyVerseIndex];
+
+                console.log("Daily Verse (getDailyVerse):", dailyVerse);
+
+                dailyVerseElement = dailyVerse;
 
                 const verseTextElement = document.getElementById("verse-text");
                 const citationElement = document.getElementById("citation");
